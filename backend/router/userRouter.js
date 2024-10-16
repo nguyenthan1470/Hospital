@@ -1,0 +1,29 @@
+import express from "express";
+import { addNewAdmin, addNewDoctor, getAllDoctor, getUserDetails, login, logoutAdmin, logoutPatient, patientRegister } from "../controller/userController.js";
+import { isAdminAuthenticated, isPatientAuthenticated } from "../middlewares/auth.js";                                              
+
+const router = express.Router();
+
+// Đăng ký bệnh nhân
+router.post("/patient/register", patientRegister);
+
+// Đăng nhập
+router.post("/login", login);
+
+// Thêm admin mới (chỉ cho admin đã xác thực)  
+router.post("/admin/addnew", isAdminAuthenticated ,addNewAdmin);   
+
+router.get("/doctors", getAllDoctor);
+
+router.get("/admin/me", isAdminAuthenticated,getUserDetails);
+
+router.get("/patient/me", isPatientAuthenticated,getUserDetails);
+
+router.get("/admin/logout", isAdminAuthenticated,logoutAdmin);
+
+router.get("/patient/logout", isPatientAuthenticated,logoutPatient);
+
+router.post("/doctor/addnew", isAdminAuthenticated, addNewDoctor);
+
+
+export default router;
